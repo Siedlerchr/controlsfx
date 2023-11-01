@@ -46,6 +46,10 @@ jobs:
         run: |
          ./gradlew publishAllPublicationsToGitHubPackagesRepository
           echo ::set-output name=exit_code::$?
+        env:
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 
       - name: Update Javadocs
         if: steps.deploy.outputs.exit_code == 0
