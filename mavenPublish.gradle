@@ -7,57 +7,69 @@ signing {
 }
 
 publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
-            afterEvaluate {
-                artifact sourceJar
-                artifact javadocJar
-            }
 
-            versionMapping {
-                usage('java-api') {
-                    fromResolutionOf('runtimeClasspath')
-                }
-                usage('java-runtime') {
-                    fromResolutionResult()
-                }
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = "https://maven.pkg.github.com/jabref/controlsfx"
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
             }
+        }
 
-            pom {
-                name = 'ControlsFX'
-                description = 'High quality UI controls and other tools to complement the core JavaFX distribution'
-                url = 'http://www.controlsfx.org/'
-                licenses {
-                    license {
-                        name = 'The 3-Clause BSD License'
-                        url = 'http://www.opensource.org/licenses/bsd-license.php'
-                        distribution = 'repo'
+        publications {
+            mavenJava(MavenPublication) {
+                from components.java
+                afterEvaluate {
+                    artifact sourceJar
+                    artifact javadocJar
+                }
+
+                versionMapping {
+                    usage('java-api') {
+                        fromResolutionOf('runtimeClasspath')
+                    }
+                    usage('java-runtime') {
+                        fromResolutionResult()
                     }
                 }
-                developers {
-                    developer {
-                        name = 'Jonathan Giles'
-                        email = 'jonathan@jonathangiles.net'
-                        roles = [
-                                'author',
-                                'developer'
-                        ]
-                    }
-                }
-                scm {
-                    connection = 'scm:git:https://github.com/controlsfx/controlsfx'
-                    developerConnection = 'scm:git:ssh://hg@github.com/controlsfx/controlsfx'
-                    url = 'https://github.com/controlsfx/controlsfx'
-                }
 
-                // Remove classifier for JavaFX dependencies
-                withXml {
-                    Node pomNode = asNode()
-                    pomNode.dependencies.'*'.findAll() {
-                        it.groupId.text() == 'org.openjfx'
-                    }.each {
-                        it.parent().remove(it)
+                pom {
+                    name = 'ControlsFX'
+                    description = 'High quality UI controls and other tools to complement the core JavaFX distribution'
+                    url = 'http://www.controlsfx.org/'
+                    licenses {
+                        license {
+                            name = 'The 3-Clause BSD License'
+                            url = 'http://www.opensource.org/licenses/bsd-license.php'
+                            distribution = 'repo'
+                        }
+                    }
+                    developers {
+                        developer {
+                            name = 'Jonathan Giles'
+                            email = 'jonathan@jonathangiles.net'
+                            roles = [
+                                    'author',
+                                    'developer'
+                            ]
+                        }
+                    }
+                    scm {
+                        connection = 'scm:git:https://github.com/jabref/controlsfx'
+                        developerConnection = 'scm:git:ssh://hg@github.com/jabref/controlsfx'
+                        url = 'https://github.com/jabref/controlsfx'
+                    }
+
+                    // Remove classifier for JavaFX dependencies
+                    withXml {
+                        Node pomNode = asNode()
+                        pomNode.dependencies.'*'.findAll() {
+                            it.groupId.text() == 'org.openjfx'
+                        }.each {
+                            it.parent().remove(it)
+                        }
                     }
                 }
             }

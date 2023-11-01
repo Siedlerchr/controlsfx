@@ -51,13 +51,13 @@ subprojects {
         }
     }
 
-    task sourceJar(type: Jar) {
+    tasks.register('sourceJar', Jar) {
         from sourceSets.main.java
         from sourceSets.main.resources
         archiveClassifier.set('sources')
     }
 
-    task javadocJar(type: Jar) {
+    tasks.register('javadocJar', Jar) {
         dependsOn javadoc
         from javadoc.destinationDir
         archiveClassifier.set('javadoc')
@@ -69,8 +69,10 @@ subprojects {
     }
 
     // Do not publish Gradle modules
-    tasks.withType(GenerateModuleMetadata) {
-        enabled = false
+    tasks.withType(GenerateModuleMetadata).tap {
+        configureEach {
+            enabled = false
+        }
     }
 }
 
