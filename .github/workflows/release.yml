@@ -3,6 +3,7 @@ on:
   push:
     tags:
       - '*'
+  workflow_dispatch:
 
 jobs:
   release:
@@ -45,7 +46,6 @@ jobs:
         run: |
          ./gradlew publishAllPublicationsToGitHubPackagesRepository
           echo ::set-output name=exit_code::$?
-
 
       - name: Update Javadocs
         if: steps.deploy.outputs.exit_code == 0
